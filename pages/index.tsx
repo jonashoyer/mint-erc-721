@@ -16,20 +16,26 @@ const Home: NextPage = () => {
   }
   
   const fetchNFTList = React.useCallback(async () => {
-    if (!selectedAccount) return;
-    const maxTokenSupply = await contracts?.betterNFT.methods.maxTokenSupply().call();
-    setMaxTokenSupply(maxTokenSupply);
-    
-    const totalSupply = await contracts?.betterNFT.methods.totalSupply().call();
-    setTotalSupply(totalSupply);
+    try {
 
-    const balance = Number(await contracts?.betterNFT.methods.balanceOf(selectedAccount).call());
-    const allPTokens = [...Array(balance)].map((_, i) => {
-      return contracts?.betterNFT.methods.tokenOfOwnerByIndex(selectedAccount, i).call();
-    })
-
-    const tokens = await Promise.all(allPTokens);
-    setOwnedTokens(tokens);
+      if (!selectedAccount) return;
+      const maxTokenSupply = await contracts?.betterNFT.methods.maxTokenSupply().call();
+      setMaxTokenSupply(maxTokenSupply);
+      
+      const totalSupply = await contracts?.betterNFT.methods.totalSupply().call();
+      setTotalSupply(totalSupply);
+      
+      const balance = Number(await contracts?.betterNFT.methods.balanceOf(selectedAccount).call());
+      const allPTokens = [...Array(balance)].map((_, i) => {
+        return contracts?.betterNFT.methods.tokenOfOwnerByIndex(selectedAccount, i).call();
+      })
+      
+      const tokens = await Promise.all(allPTokens);
+      setOwnedTokens(tokens);
+    } catch (err) {
+      console.error(err);
+      // TODO: Wrong network?
+    }
   }, [contracts?.betterNFT.methods, selectedAccount]);
   
 

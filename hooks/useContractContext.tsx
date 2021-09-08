@@ -12,11 +12,12 @@ interface ContractData<T = {}> {
   accounts: string[] | null;
   selectedAccount: string | null;
   setSelectedAccount: (acc: string) => any;
+  netId: number | null;
 }
 
 const noop = () => {};
 
-export const ContractContext = React.createContext<ContractData>({ web3: null, contracts: null, accounts: null, selectedAccount: null, setSelectedAccount: noop, connect: noop });
+export const ContractContext = React.createContext<ContractData>({ web3: null, contracts: null, accounts: null, selectedAccount: null, netId: null, setSelectedAccount: noop, connect: noop });
 
 export function useContractContext<T = {}>() {
   return React.useContext(ContractContext) as ContractData<T>;

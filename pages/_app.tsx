@@ -9,6 +9,7 @@ function MyApp({ Component, pageProps }: AppProps) {
     <ThemeProvider theme={theme}>
       <ContractProvider
         autoConnect
+        reloadOnChainChanged
         contracts={{
           betterNFT: {
             abi: BetterNFT.abi,
