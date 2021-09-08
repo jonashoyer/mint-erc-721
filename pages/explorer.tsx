@@ -59,17 +59,20 @@ const Home: NextPage = () => {
           return (
             <Box key={index}>
               <img alt={`${index}`} src={`/api/img/${index}`} style={{ height: 128, width: 128 }} />
-              <Typography>{index}</Typography>
-              <Typography>W {((meta?.sum[0] / (16*16))* 100).toFixed(2)}%</Typography>
-              <Typography>B {((meta?.sum[1] / (16*16))* 100).toFixed(2)}%</Typography>
-              <Typography>C {((meta?.artifacts.checker.length / (16*16))* 100).toFixed(2)}%</Typography>
-              {meta?.attributes.map((e: any, i) => (
-                <Typography key={i}>{e.name}</Typography>
+              <Typography sx={{ lineHeight: '1' }} variant='body2'>{index}</Typography>
+              <Typography variant='body2' fontSize={11}>{(meta?.sum[0] / 2.56).toFixed(2)}% {(meta?.sum[1] / 2.56).toFixed(2)}% {(meta?.artifacts.checker.length / 2.56).toFixed(2)}%</Typography>
+              {meta?.attributes.map((e: any, i: number) => (
+                <Typography key={i} sx={{ lineHeight: '1.15' }} variant='overline'>{e.name}</Typography>
               ))}
             </Box>
             )
           }
         )}
+      </Box>
+      <Box>
+        <Button onClick={() => setPage(page - 1)}>{'<'}</Button>
+        {page}
+        <Button onClick={() => setPage(page + 1)}>{'>'}</Button>
       </Box>
     </Box>
   )

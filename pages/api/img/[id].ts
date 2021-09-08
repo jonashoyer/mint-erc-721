@@ -35,18 +35,23 @@ export default async function handler(
 export const drawMapping = [{
   color: [255, 255, 255],
   value: 609,
+  label: 'White',
 }, {
   color: [0, 0, 0],
   value: 368,
+  label: 'Black',
 }, {
   color: [0, 255, 0],
   value: 14,
+  label: 'Green',
 }, {
   color: [0, 0, 255],
   value: 8,
+  label: 'Blue',
 }, {
   color: [255, 0, 0],
   value: 1,
+  label: 'Red',
 }]
 export const drawMappingMaxValue = drawMapping.reduce((t, e) => t + e.value, 0);
 

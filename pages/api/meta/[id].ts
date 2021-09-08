@@ -17,7 +17,7 @@ export default async function handler(
 
   const sum = [0, 0, 0, 0, 0];
 
-  const artifacts: any = { checker: [] };
+  const artifacts: any = { checker: [], eyes: [] };
 
   const m = mapping.flat();
 
@@ -29,7 +29,7 @@ export default async function handler(
       const isInv = (p: any) => p && ((e.index == 0 && p.index == 1) || (e.index == 1 && p.index == 0));
 
       const hasL = i % 16 != 0;
-      const hasR = i - 1 % 16 != 0;
+      const hasR = i + 1 % 16 != 0;
       const tl = hasL ? m[i - 17] : null;
       const t = m[i - 16];
       const tr = hasR ? m[i - 15] : null;
@@ -39,6 +39,33 @@ export default async function handler(
       const b = m[i + 16];
       const br = m[i + 17];
 
+
+      const detectEyePattern = () => {
+        if (i % 16 >= 14) return;
+        if (i >= 224) return;
+
+        if (e.index != 1) return;
+        if (b.index != 1) return;
+        if (r!.index != 1) return;
+        if (br!.index == 1) return;
+
+        const rr = m[i + 2];
+        if (rr.index != 1) return;
+
+        const bb = m[i + 32];
+        if (bb.index != 1) return;
+        
+        const brr = m[i + 18];
+        if (brr.index != 1) return;
+
+        const bbr = m[i + 33];
+        if (bbr.index != 1) return;
+
+        const bbrr = m[i + 34];
+        if (bbrr.index != 1) return;
+
+        return artifacts.eyes.push({ index: i, name: `${br.label} Eye` });
+      }
       
       const detectCheckerPattern = () => {
 
@@ -58,7 +85,7 @@ export default async function handler(
         }
       }
 
-
+      detectEyePattern();
       detectCheckerPattern();
     }
   })
