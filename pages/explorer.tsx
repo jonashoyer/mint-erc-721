@@ -1,15 +1,15 @@
 import React from 'react'
 import type { NextPage } from 'next'
-import { Box, Button, Paper, Typography } from '@material-ui/core'
-import { useContractContext } from '../hooks/useContractContext';
+import { Box, Button, Typography } from '@material-ui/core'
 import axios from 'axios';
 import Header from '../components/Header';
+import Link from 'next/link';
+import Image from 'next/image';
+import { Link as MuiLink } from '@material-ui/core';
 
 const PAGE_SIZE = 14 * 7;
 
 const Home: NextPage = () => {
-  const { web3, accounts, selectedAccount, contracts, connect } = useContractContext<{ betterNFR: true }>();
-  const hasWallet = accounts !== null;
 
   const [page, setPage] = React.useState(0);
 
@@ -26,11 +26,10 @@ const Home: NextPage = () => {
       return [...ids, index];
     }, [])
 
-    console.log({fetchIds});
     if (fetchIds.length == 0) return;
 
     setLoading(true);
-    const p = fetchIds.map(async (i) => {
+    const p = fetchIds.map(async (i: string) => {
       const res = await axios.get(`/api/meta/${i}`);
       return res.data;
     })
@@ -58,11 +57,16 @@ const Home: NextPage = () => {
           const meta = metaMapping[index];
           return (
             <Box key={index}>
-              <img alt={`${index}`} src={`/api/img/${index}`} style={{ height: 128, width: 128 }} />
-              <Typography sx={{ lineHeight: '1' }} variant='body2'>{index}</Typography>
-              <Typography variant='body2' fontSize={11}>{(meta?.sum[0] / 2.56).toFixed(2)}% {(meta?.sum[1] / 2.56).toFixed(2)}% {(meta?.artifacts.checker.length / 2.56).toFixed(2)}%</Typography>
+              <Image alt={`${index}`} src={`/api/img/${index}`} height={128} width={128} />
+              <Link passHref href={`/t/${index}`}>
+                <MuiLink sx={{ display: 'block', color: t => t.palette.text.primary, textDecoration: 'none', lineHeight: '1' }}>{index}</MuiLink>
+              </Link>
+              {meta && <Typography variant='body2' fontSize={11}>{(meta.sum[0] / 2.56).toFixed(2)}% {(meta.sum[1] / 2.56).toFixed(2)}% {(meta.artifacts.checker.length / 2.56).toFixed(2)}%</Typography>}
               {meta?.attributes.map((e: any, i: number) => (
                 <Typography key={i} sx={{ lineHeight: '1.15' }} variant='overline'>{e.name}</Typography>
+              ))}
+              {meta?.artifacts.eyes.map((e: any, i: number) => (
+                <Typography variant='overline' key={i}>{e.name}</Typography>
               ))}
             </Box>
             )

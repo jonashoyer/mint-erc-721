@@ -38,16 +38,18 @@ const Home: NextPage = ({  }) => {
           ))}
         </Box>
         <Box>
-          <Typography>#{index}</Typography>
-          <Typography>White {(((meta?.sum[0] ?? 0) / 256) * 100).toFixed(2)}%</Typography>
-          <Typography>Black {(((meta?.sum[1] ?? 0) / 256) * 100).toFixed(2)}%</Typography>
-          <Typography>Checker Pattern {(((meta?.artifacts.checker.length ?? 0) / 256) * 100).toFixed(2)}%</Typography>
-          {meta?.attributes.map((e: any, i: number) => (
-            <Typography key={i}>{e.name}</Typography>
-          ))}
-          {meta?.artifacts.eyes.map((e: any, i: number) => (
-            <Typography variant='overline' key={i}>{e.name}</Typography>
-          ))}
+          <Typography variant='h6'>#{index}</Typography>
+          <Typography variant='subtitle2'>White {(((meta?.sum[0] ?? 0) / 256) * 100).toFixed(2)}%</Typography>
+          <Typography variant='subtitle2'>Black {(((meta?.sum[1] ?? 0) / 256) * 100).toFixed(2)}%</Typography>
+          <Typography variant='subtitle2'>Checker Pattern {(((meta?.artifacts.checker.length ?? 0) / 256) * 100).toFixed(2)}%</Typography>
+          <Box sx={{ py: 1 }}>
+            {meta?.attributes.map((e: any, i: number) => (
+              <Typography key={i} variant='overline'>{e.name}</Typography>
+              ))}
+            {meta?.artifacts.eyes.map((e: any, i: number) => (
+              <Typography variant='overline' key={i}>{e.name}</Typography>
+            ))}
+          </Box>
         </Box>
       </Box>
     </Box>

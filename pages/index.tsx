@@ -10,6 +10,7 @@ const Home: NextPage = () => {
   const [ownedTokens, setOwnedTokens] = React.useState<string[] | null>(null);
   const [maxTokenSupply, setMaxTokenSupply] =  React.useState();
   const [totalSupply, setTotalSupply] =  React.useState();
+  const [price, setPrice] = React.useState<string | null>(null);
   
   const mintHandler = () => {
     contracts?.betterNFT.methods.mint().send({ value: Web3.utils.toWei('0.1', 'ether'), from: selectedAccount });
@@ -24,6 +25,9 @@ const Home: NextPage = () => {
       
       const totalSupply = await contracts?.betterNFT.methods.totalSupply().call();
       setTotalSupply(totalSupply);
+
+      const price = await contracts?.betterNFT.methods.mintPrice().call();
+      setPrice(price);
       
       const balance = Number(await contracts?.betterNFT.methods.balanceOf(selectedAccount).call());
       const allPTokens = [...Array(balance)].map((_, i) => {
@@ -50,12 +54,12 @@ const Home: NextPage = () => {
 
       <Box sx={{ p: 4, textAlign: 'center' }}>
         <Typography sx={{ mb: 6 }} variant='h2'>Better NFT</Typography>
-        <Typography sx={{ mb: 2 }} variant='h5'>{totalSupply} / {maxTokenSupply}</Typography>
-        <Button sx={{ px: 7, py: 1.5 }} size='large' variant='outlined' onClick={mintHandler}>Mint!</Button>
+        {totalSupply && maxTokenSupply && <Typography sx={{ mb: 2 }} variant='h5'>{totalSupply} / {maxTokenSupply}</Typography>}
+        {price && <Typography sx={{ mb: 1 }} variant='subtitle1'>Mint price {Web3.utils.fromWei(price, 'ether')} ether + gas</Typography>}
+        <Button sx={{ px: 7, py: 1.5 }} size='large' variant='outlined' onClick={mintHandler}>Mint now!</Button>
       </Box>
       <Box sx={{ p: 2 }}>
-        <Typography sx={{ mb: 1 }} variant='subtitle1'>Your Collection ({ownedTokens?.length})</Typography>
-        <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap' }}>
+        <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap', justifyContent: 'center' }}>
           {ownedTokens?.map(i => 
             // eslint-disable-next-line @next/next/no-img-element
             <img key={i} alt={`${i}`} src={`/api/img/${i}`} style={{ height: 128, width: 128 }} />
